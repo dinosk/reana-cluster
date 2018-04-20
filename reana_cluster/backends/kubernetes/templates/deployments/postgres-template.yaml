@@ -1,0 +1,56 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: postgresql
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: postgresql
+    spec:
+      containers:
+      - name: postgresql
+        image: postgres:9.6
+        env:
+        - name: POSTGRES_USER
+          # FIXME JINJA template
+          value: reana
+        - name: POSTGRES_PASSWORD
+          value: reana
+        - name: POSTGRES_DB
+          value: reana
+        - name: DB_EXTENSION
+          value: pg_trgm
+        ports:
+        - name: postgres
+          containerPort: 5432
+        volumeMounts:
+        - mountPath: /var/lib/postgresql
+          # test if this persists
+          name: data
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -h
+            - localhost
+            - -U
+            - reana
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - pg_isready
+            - -h
+            - localhost
+            - -U
+            - reana
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+      volumes:
+        # check where is this dir
+      - name: data
+        emptyDir: {}
