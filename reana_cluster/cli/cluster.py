@@ -29,6 +29,7 @@ import sys
 
 import click
 import yaml
+from sqlalchemy.exc import OperationalError
 
 from reana_commons.database import init_db
 from ..config import (generated_cluster_conf_default_path,
@@ -136,8 +137,16 @@ def init(ctx, skip_initialization, output):
     try:
         backend = ctx.obj.backend
 
-        init_db()
-        click.echo(click.style('DB Created.', fg='green'))
+        try:
+            init_db()
+            click.echo(click.style('DB created', fg='green'))
+        except OperationalError as e:
+            click.echo(click.style(
+                'Could not connect to database.\nPlease make sure'
+                ' the database service is running and that '
+                'your SQLALCHEMY_DATABASE_URI is set up properly.',
+                fg='red'))
+            sys.exit(1)
 
         if not skip_initialization:
             logging.info('Connecting to {cluster} at {url}'
