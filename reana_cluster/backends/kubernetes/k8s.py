@@ -190,6 +190,7 @@ class KubernetesBackend(ReanaBackendABC):
                 components = cluster_spec['components']
                 rs_img = components['reana-server']['image']
                 rjc_img = components['reana-job-controller']['image']
+                rw_img = components['reana-worker']['image']
                 rwfc_img = components['reana-workflow-controller']['image']
                 rwm_img = components['reana-workflow-monitor']['image']
                 rmb_img = components['reana-message-broker']['image']
@@ -206,6 +207,8 @@ class KubernetesBackend(ReanaBackendABC):
                     .get('environment', [])
                 rwfc_environment = components['reana-workflow-controller'] \
                     .get('environment', [])
+                rw_environment = components['reana-worker'] \
+                    .get('environment', [])
                 rwm_environment = components['reana-workflow-monitor'] \
                     .get('environment', [])
                 rmb_environment = components['reana-message-broker'] \
@@ -218,17 +221,6 @@ class KubernetesBackend(ReanaBackendABC):
                     .get('environment', [])
                 rweserial_environment = components[
                     'reana-workflow-engine-serial'] \
-                    .get('environment', [])
-
-                rs_environment = components['reana-server']\
-                    .get('environment', [])
-                rjc_environment = components['reana-job-controller'] \
-                    .get('environment', [])
-                rwfc_environment = components['reana-workflow-controller'] \
-                    .get('environment', [])
-                rwm_environment = components['reana-workflow-monitor'] \
-                    .get('environment', [])
-                rmb_environment = components['reana-message-broker'] \
                     .get('environment', [])
 
                 rs_mountpoints = components['reana-server']\
@@ -260,6 +252,7 @@ class KubernetesBackend(ReanaBackendABC):
                            SERVER_IMAGE=rs_img,
                            JOB_CONTROLLER_IMAGE=rjc_img,
                            WORKFLOW_CONTROLLER_IMAGE=rwfc_img,
+                           WORKER_IMAGE=rw_img,
                            WORKFLOW_MONITOR_IMAGE=rwm_img,
                            MESSAGE_BROKER_IMAGE=rmb_img,
                            WORKFLOW_ENGINE_YADAGE_IMAGE=rweyadage_img,
@@ -276,6 +269,7 @@ class KubernetesBackend(ReanaBackendABC):
                            RS_ENVIRONMENT=rs_environment,
                            RJC_ENVIRONMENT=rjc_environment,
                            RWFC_ENVIRONMENT=rwfc_environment,
+                           RW_ENVIRONMENT=rw_environment,
                            RWM_ENVIRONMENT=rwm_environment,
                            RMB_ENVIRONMENT=rmb_environment,
                            RWEYADAGE_ENVIRONMENT=rweyadage_environment,
@@ -338,7 +332,6 @@ class KubernetesBackend(ReanaBackendABC):
                 logging.debug(json.dumps(manifest))
 
                 if manifest['kind'] == 'Deployment':
-
                     # REANA Job Controller needs access to K8S-cluster's
                     # service-account-token in order to create new Pods.
                     if manifest['metadata']['name'] == 'job-controller':

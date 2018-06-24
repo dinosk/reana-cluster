@@ -8,11 +8,18 @@ cluster:
 components:
   reana-workflow-controller:
     type: "docker"
-    image: "reanahub/reana-workflow-controller:0.3.0.dev20180620"
+    image: "reanahub/reana-workflow-controller:latest"
     environment:
       - <<: *db_base_config
       - SHARED_VOLUME_PATH: "/reana"
       - ORGANIZATIONS: "default,alice,atlas,cms,lhcb"
+
+  reana-worker:
+    type: "docker"
+    image: "dinossimpson/reana-workflow-controller:celery"
+    environment:
+      - <<: *db_base_config
+      - SHARED_VOLUME_PATH: "/reana"
 
   reana-job-controller:
     type: "docker"

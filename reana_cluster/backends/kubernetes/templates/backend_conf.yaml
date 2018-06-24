@@ -8,6 +8,7 @@
 {% include 'deployments/cwl-default-worker.yaml' %}
 {% include 'deployments/serial-default-worker.yaml' %}
 {% include 'deployments/wdb-template.yaml' %}
+{% include 'deployments/worker-template.yaml' %}
 {% include 'deployments/db-template.yaml' %}
 {% include 'services/job-controller-template.yaml' %}
 {% include 'services/message-broker-template.yaml' %}
