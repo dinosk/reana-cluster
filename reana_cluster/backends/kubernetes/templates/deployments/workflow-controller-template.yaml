@@ -45,6 +45,18 @@ spec:
           value: "{{value}}"
         {% endfor %}
         {% endfor %}
+      - name: celery-worker
+        image: {{WORKFLOW_CONTROLLER_IMAGE}}
+        command: ["celery", "-A", "reana_workflow_controller.celeryapp", "worker", "-l", "info"]
+        imagePullPolicy: {{IMAGE_PULL_POLICY}}
+        env:
+        {% set environment=RWFC_ENVIRONMENT %}
+        {% for envvar in environment %}
+        {% for key, value in envvar.items() %}
+        - name: {{key}}
+          value: "{{value}}"
+        {% endfor %}
+        {% endfor %}
       volumes:
       - name: reana-shared-volume
         {% if DEPLOYMENT == 'prod' %}
