@@ -8,6 +8,7 @@ cluster:
   #    - 188.184.86.25:6790
   #    - 188.184.94.56:6790
   #    - 188.185.66.208:6790
+  #  reana_url: "reana.cern.ch"
   db_persistence_path: "/reanadb"
 
 components:
