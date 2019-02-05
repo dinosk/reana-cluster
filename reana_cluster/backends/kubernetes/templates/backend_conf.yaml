@@ -19,15 +19,7 @@
 {% include 'ingress/reana-ingress.yaml' %}
 {%- if not DEBUG %}
 {% include 'storageclasses/ceph.yaml' %}
-{% include 'storageclasses/cvmfs-cms.yaml' %}
-{% include 'storageclasses/cvmfs-atlas.yaml' %}
-{% include 'storageclasses/cvmfs-alice.yaml' %}
-{% include 'storageclasses/cvmfs-lhcb.yaml' %}
 {% include 'persistentvolumeclaims/ceph.yaml' %}
-{% include 'persistentvolumeclaims/cvmfs-cms.yaml' %}
-{% include 'persistentvolumeclaims/cvmfs-atlas.yaml' %}
-{% include 'persistentvolumeclaims/cvmfs-lhcb.yaml' %}
-{% include 'persistentvolumeclaims/cvmfs-alice.yaml' %}
 {%- else %}
 {% include 'deployments/wdb-template.yaml' %}
 {%- endif %}
